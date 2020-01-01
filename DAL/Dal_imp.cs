@@ -13,109 +13,104 @@ namespace DAL
         //GuestRequest
         public void addGuestRequest(GuestRequest guestRequest)
         {
-            if(guestRequest.EntryDate>guestRequest.ReleaseDate)
-            DS.DataSource.guestRequests.Add(Cloning.Clone(guestRequest));
-            else 
-             throw new System.ArgumentException("release date must be after entry date");        
+            var match = from guest in DS.DataSource.guestRequests
+                        where guestRequest.GuestRequestKey == guest.GuestRequestKey
+                        select guest;
+            if (match.Count() > 0)
+                throw new dalExeptionIdAlreadyexist();
+            else
+                DataSource.guestRequests.Add(Cloning.Clon( guestRequest));
         }
-        public void updateGuestRequest(int guestRequestKey, GuestRequestStatus guestRequestStatus)
+        public void updateGuestRequest(int guestRequestKey, StatusOrder guestRequestStatus)
         {
-            int counter = 0;
             var match = from guest in DS.DataSource.guestRequests
                         where guestRequestKey == guest.GuestRequestKey
                         select guest;
-
-            int count =match.ToList().RemoveAll(guest=>guestRequestKey==guest.GuestRequestKey);
-            if(count==0)
-                throw new 
+            if (match.Count() == 0)
+                throw new dalExeptionItemDoesntexist();
+            else if (match.Count() > 1)
+                throw new dalExeptionMoreThanOneAnswer();
+            match.ToList().RemoveAll(guest => guestRequestKey == guest.GuestRequestKey);
             match.ToList()[0].status = guestRequestStatus;
-            DataSource.guestRequests.Add(match.ToList[0]);
-            
+            DataSource.guestRequests.Add(match.ToList()[0]);
 
         }
-        public void deleteGuestRequest(GuestRequest guestRequest)
+        public void deleteGuestRequest(int guestRequestKey)//if theres more than one matching its will remove all 
         {
-            int counter = 0;
             var match = from guest in DS.DataSource.guestRequests
-                        where guestRequest.Equals(guest)
+                        where guestRequestKey == guest.GuestRequestKey
                         select guest;
-            foreach (GuestRequest item in DS.DataSource.guestRequests)
-            {
-
-                if (item.Equals(match))
-                    DS.DataSource.guestRequests.RemoveAt(counter);
-                ++counter;
-            }
-            return;
+            if (match.Count() == 0)
+                throw new dalExeptionItemDoesntexist();
+            DataSource.guestRequests.RemoveAll(guest => guestRequestKey == guest.GuestRequestKey);
         }
 
         //HostingUnit
         public void addHostingUnit(HostingUnit hostingUnit)
         {
             var match = from hostU in DS.DataSource.hostingUnits
-                        let equal = isEquals(hostU.GetHost().getHostKey(), hostingUnit.GetHost().getHostKey())
+                        let equal = hostU.HostingUnitKey== hostingUnit.HostingUnitKey
                         where equal
                         select hostU;
-            if (match.Any())
-                throw new System.ArgumentException("there's no two persons with the same id");
+            if (match.Count() > 0)
+                throw new dalExeptionIdAlreadyexist();
             else
             {
                 DS.DataSource.hostingUnits.Add(hostingUnit);
             }
 
         }
-        public void updateHostingUnit(HostingUnit hostingUnit, HostingUnit hostingUnitUpdate)
+        public void updateHostingUnit(int hostingUnitKey, bool [,] diary)
         {
-            int counter = 0;
             var match = from hostU in DS.DataSource.hostingUnits
-                        where hostingUnit.Equals(hostU)
-                        select (hostU);
-            foreach (HostingUnit item in DS.DataSource.hostingUnits)
-            {
+                        where hostingUnitKey == hostU.HostingUnitKey
+                        select hostU;
+            if (match.Count() == 0)
+                throw new dalExeptionItemDoesntexist();
+            else if (match.Count() > 1)
+                throw new dalExeptionMoreThanOneAnswer();
+            match.ToList().RemoveAll(hostU  => hostingUnitKey == hostU.HostingUnitKey);
+            match.ToList()[0].Diary = diary;
+            DataSource.hostingUnits.Add(match.ToList()[0]);
 
-                if (item.Equals(match))
-                    DS.DataSource.hostingUnits.Insert(counter, hostingUnitUpdate);
-                ++counter;
-            }
-            return;
         }
         public void deleteHostingUnit(HostingUnit hostingUnit)
         {
-            int counter = 0;
-            var match = from hostingU in DS.DataSource.hostingUnits
-                        where hostingUnit.Equals(hostingU)
-                        select hostingU;
-            foreach (HostingUnit item in DS.DataSource.hostingUnits)
-            {
-
-                if (item.Equals(match))
-                    DS.DataSource.hostingUnits.RemoveAt(counter);
-                ++counter;
-            }
-            throw dalExeptionItemDoesntexist();
-
+            var match = from hostU in DS.DataSource.hostingUnits
+                        where hostingUnit.HostingUnitKey == hostU.HostingUnitKey
+                        select hostU;
+            if (match.Count() == 0)
+                throw new dalExeptionItemDoesntexist();
+            DataSource.guestRequests.RemoveAll(hostU => hostingUnit.HostingUnitKey == hostU.GuestRequestKey);
         }
 
         //Order
         public void addOrder(Order order)
         {
-            DS.DataSource.orders.Add(order);
-        }
-        public void updateOrder(Order order, Order orderUpdate)
-        {
-            
-            int counter = 0;
-            var match = from ord in DS.DataSource.orders
-                        where order.Equals(ord)
-                       select  (temp=ord.status);
-            foreach (Order item in DS.DataSource.orders)
+            var match = from anOrder in DataSource.orders
+                        let equal = anOrder.OrderKey == order.OrderKey
+                        where equal
+                        select anOrder;
+            if (match.Count() > 0)
+                throw new dalExeptionIdAlreadyexist();
+            else
             {
-
-                if (item.Equals(match))
-                   DS.DataSource.orders.ElementAt(counter).status=match;
-                ++counter;
+                DataSource.orders.Add(Cloning.Clon(order));
             }
-            return;
+        }
+        public void updateOrder(int orderKey, StatusOrder status )
+        {
+
+            var match = from anOrder in DataSource.orders
+                        where orderKey == anOrder.HostingUnitKey
+                        select anOrder;
+            if (match.Count() == 0)
+                throw new dalExeptionItemDoesntexist();
+            else if (match.Count() > 1)
+                throw new dalExeptionMoreThanOneAnswer();
+            match.ToList().RemoveAll(anOrder => anOrder.OrderKey  == orderKey);
+            match.ToList()[0].status = status;
+            DataSource.orders.Add(match.ToList()[0]);
         }
 
         //get List
@@ -137,11 +132,6 @@ namespace DAL
         public List<Host> GetHosts()
         {
             return DS.DataSource.hosts;
-        }
-
-        public bool isEquals(int a, int b)
-        {
-            return a == b;
         }
 
 

@@ -12,7 +12,7 @@ namespace BE
 
         public Host Owner;
         public string HostingUnitName;
-        public static bool[,] Diary = new bool[12,31];
+        public  bool[,] Diary = new bool[12,31];
     public int HostingUnitKey = Configuration.getHostingUnitKeyTempPlusOne();
 
 

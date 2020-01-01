@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using BE;
 
 namespace DAL
 {
@@ -33,7 +34,7 @@ namespace DAL
                 ChildrensAttractions = guestRequest.ChildrensAttractions
             };
         }
-        public static Host Cloan(this Host host)
+        public static Host Clon(this Host host)
         {
             return new Host()
             {
@@ -47,7 +48,7 @@ namespace DAL
                 hostingUnits = new List<HostingUnit>(host.hostingUnits)
             };
         }
-        public static HostingUnit Cloan(this HostingUnit hostingUnit)
+        public static HostingUnit Clon(this HostingUnit hostingUnit)
         {
             return new HostingUnit()
             {
@@ -58,7 +59,7 @@ namespace DAL
             };
         }
 
-        public static Order Cloan(this Order order)
+        public static Order Clon(this Order order)
         {
             return new Order()
             {
