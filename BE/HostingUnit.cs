@@ -18,20 +18,7 @@ namespace BE
 
     public Host GetHost() { return Owner; }
 
-    /// <summary>
-    /// constructor
-    /// </summary>
-    /// <param name="hostingUnitKey"></param>
-    /// <param name="owner"></param>
-    /// <param name="hostingUnitName"></param>
-    /// <param name="diary"></param>
-    /*  HostingUnit(int hostingUnitKey, Host owner, string hostingUnitName, bool[,] diary)
-      {
-          HostingUnitKey = hostingUnitKey;
-          Owner = owner;
-          HostingUnitName = hostingUnitName;
-          Diary = (bool[,])diary.Clone();
-      }*/
+
 
     public override string ToString() { return null; }
 
@@ -52,5 +39,15 @@ namespace BE
     }
 
     public Location location { get; set; }
+
+        public virtual bool Equals(HostingUnit hostingUnit)
+        {
+               return ( HostingUnitKey == hostingUnit.HostingUnitKey&&
+                Owner == hostingUnit.Owner&&
+                HostingUnitName == hostingUnit.HostingUnitName&&
+                Diary == hostingUnit.Diary);
+        }
+
+
 }
 }

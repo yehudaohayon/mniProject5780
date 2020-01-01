@@ -33,5 +33,32 @@ namespace BE
        public Request Garden;
        public Request ChildrensAttractions;
        public override string ToString() { return null; }
+
+        public virtual bool Equals(GuestRequest guestRequest){
+            return 
+            (
+                GuestRequestKey == guestRequest.GuestRequestKey&&
+                PrivateName == guestRequest.PrivateName&&
+                FamilyName == guestRequest.FamilyName&&
+                MailAddress == guestRequest.MailAddress&&
+
+                status == guestRequest.status&&
+                RegistrationDate == guestRequest.RegistrationDate&&
+                EntryDate == guestRequest.EntryDate&&
+                ReleaseDate == guestRequest.ReleaseDate&&
+
+                location == guestRequest.location&&
+                SubLocation == guestRequest.SubLocation&&
+                Type == guestRequest.Type&&
+
+                Adults == guestRequest.Adults&&
+                Children == guestRequest.Children&&
+
+                Pool == guestRequest.Pool&&
+                Jacuzzi == guestRequest.Jacuzzi&&
+                Garden == guestRequest.Garden&&
+                ChildrensAttractions == guestRequest.ChildrensAttractions
+            );
+        }
     }
 }

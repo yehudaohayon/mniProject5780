@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BE
+namespace DAL
 {
-    public static class Cloaning
+    public static class Cloning
     {
-        public static GuestRequest Cloan(this GuestRequest guestRequest)
+        public static GuestRequest Clon(this GuestRequest guestRequest)
         {
             return new GuestRequest()
             {
@@ -45,9 +45,9 @@ namespace BE
                 BankAccount = host.BankAccount,
                 CollectionClearance = host.CollectionClearance,
                 hostingUnits = new List<HostingUnit>(host.hostingUnits)
-        };
+            };
         }
-        public static HostingUnit Cloan (this HostingUnit hostingUnit)
+        public static HostingUnit Cloan(this HostingUnit hostingUnit)
         {
             return new HostingUnit()
             {
@@ -58,17 +58,17 @@ namespace BE
             };
         }
 
-        public static Order Cloan (this Order order)
+        public static Order Cloan(this Order order)
         {
             return new Order()
             {
-             HostingUnitKey=order.HostingUnitKey,
-            GuestRequestKey=order.GuestRequestKey,
-            OrderKey=order.OrderKey,
-            status=order.status,
-                CreateDate=order.CreateDate,
-                OrderDate=order.OrderDate
-        };
+                HostingUnitKey = order.HostingUnitKey,
+                GuestRequestKey = order.GuestRequestKey,
+                OrderKey = order.OrderKey,
+                status = order.status,
+                CreateDate = order.CreateDate,
+                OrderDate = order.OrderDate
+            };
         }
     }
 }

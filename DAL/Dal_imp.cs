@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BE;
+using DAL.Exeptions;
+using DS;
 
 namespace DAL
 {
@@ -11,22 +13,25 @@ namespace DAL
         //GuestRequest
         public void addGuestRequest(GuestRequest guestRequest)
         {
-            DS.DataSource.guestRequests.Add(guestRequest);
+            if(guestRequest.EntryDate>guestRequest.ReleaseDate)
+            DS.DataSource.guestRequests.Add(Cloning.Clone(guestRequest));
+            else 
+             throw new System.ArgumentException("release date must be after entry date");        
         }
-        public void updateGuestRequest(GuestRequest guestRequest, GuestRequest guestRequestUpdate)
+        public void updateGuestRequest(int guestRequestKey, GuestRequestStatus guestRequestStatus)
         {
             int counter = 0;
             var match = from guest in DS.DataSource.guestRequests
-                        where guestRequest.Equals(guest)
-                        select (guest);
-            foreach (HostingUnit item in DS.DataSource.hostingUnits)
-            {
+                        where guestRequestKey == guest.GuestRequestKey
+                        select guest;
 
-                if (item.Equals(match))
-                    DS.DataSource.guestRequests.Insert(counter, guestRequestUpdate);
-                ++counter;
-            }
-            return;
+            int count =match.ToList().RemoveAll(guest=>guestRequestKey==guest.GuestRequestKey);
+            if(count==0)
+                throw new 
+            match.ToList()[0].status = guestRequestStatus;
+            DataSource.guestRequests.Add(match.ToList[0]);
+            
+
         }
         public void deleteGuestRequest(GuestRequest guestRequest)
         {
@@ -87,7 +92,7 @@ namespace DAL
                     DS.DataSource.hostingUnits.RemoveAt(counter);
                 ++counter;
             }
-            return;
+            throw dalExeptionItemDoesntexist();
 
         }
 
@@ -98,15 +103,16 @@ namespace DAL
         }
         public void updateOrder(Order order, Order orderUpdate)
         {
+            
             int counter = 0;
             var match = from ord in DS.DataSource.orders
                         where order.Equals(ord)
-                        select (ord);
+                       select  (temp=ord.status);
             foreach (Order item in DS.DataSource.orders)
             {
 
                 if (item.Equals(match))
-                    DS.DataSource.orders.Insert(counter, orderUpdate);
+                   DS.DataSource.orders.ElementAt(counter).status=match;
                 ++counter;
             }
             return;
