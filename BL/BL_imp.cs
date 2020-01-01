@@ -4,16 +4,29 @@ using System.Linq;
 using System.Text;
 using BE;
 using DAL;
-
 namespace BL
 {
     class BL_imp : IBL
     {
         IDAL dal = FactoryDal.getDal();
-        //fannnnn
+
         //------------------------GuestRequest------------------------------
         public void addGuestRequest(GuestRequest guestRequest)
         {
+            if (guestRequest.ReleaseDate <= guestRequest.EntryDate)
+                throw new BLexception.InvalidDatesException();
+
+            if (guestRequest.PrivateName == "" || guestRequest.PrivateName == null)
+                throw new BLexception.PrivateNameMissingException();
+
+            if (guestRequest.FamilyName == "" || guestRequest.FamilyName == null)
+                throw new BLexception.FamilyNameMissingException();
+
+            if (guestRequest.MailAddress == "" || guestRequest.MailAddress == null || !BLexception.IsValidEmail(guestRequest.MailAddress))
+                throw new BLexception.MailAddressMissingException();
+
+
+
             dal.addGuestRequest(guestRequest);
         }
         public void updateGuestRequest(GuestRequest guestRequest, GuestRequest guestRequestUpdate)
@@ -119,7 +132,7 @@ namespace BL
                        where func
                        select guestRequest;
 
-            return (List<GuestRequest>) list;
+            return (List<GuestRequest>)list;
         }
 
         public IEnumerable<IGrouping<int, Host>> HostByhostingUnitNum()
@@ -143,7 +156,7 @@ namespace BL
         public List<Order> timePast(int day)
         {
             throw new NotImplementedException();
-        }  
-       
+        }
+
     }
 }
