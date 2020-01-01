@@ -11,7 +11,6 @@ namespace BL
     {
         IDAL dal = FactoryDal.getDal();
         //fannnnn
-
         //------------------------GuestRequest------------------------------
         public void addGuestRequest(GuestRequest guestRequest)
         {
