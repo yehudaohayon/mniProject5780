@@ -10,6 +10,7 @@ namespace BL
     class BL_imp : IBL
     {
         IDAL dal = FactoryDal.getDal();
+        //fannnnn
 
         //------------------------GuestRequest------------------------------
         public void addGuestRequest(GuestRequest guestRequest)
